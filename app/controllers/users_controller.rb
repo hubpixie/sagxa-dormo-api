@@ -10,6 +10,7 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
+    #logger.debug(params.fetch(:user, {}).permit(:name))
     render json: @user
   end
 
@@ -41,7 +42,11 @@ class UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])
+      if params[:id].to_i == 0 
+        @user = User.find_by!(params.fetch(:user, {}).permit(:name))
+      else
+        @user = User.find(params[:id])
+      end
     end
 
     # Only allow a trusted parameter "white list" through.
